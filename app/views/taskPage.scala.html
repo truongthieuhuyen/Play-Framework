@@ -1,6 +1,7 @@
 @*
 *taskPage Template File
 *@
+
 @(tasks: Seq[String])
 
 @main("Task List") {
@@ -8,9 +9,8 @@
 
 <ul>
     @for(item <- tasks) {
-        <li>@item</li>
+    <li>@item</li>
     }
-<!--    <li>task1</li>-->
-<!--    <li>task2</li>-->
 </ul>
+
 }
