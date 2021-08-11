@@ -2,7 +2,7 @@
 *taskPage Template File
 *@
 
-@(tasks: Seq[String])
+@(tasks: Seq[String])(implicit flash: Flash)
 
 @main("Task List") {
 <h1>Task</h1>

@@ -30,7 +30,7 @@ class TaskList @Inject()(val controllerComponents: ControllerComponents) extends
         Redirect(routes.TaskList.taskList).withSession("username" -> username)
       }
       else {
-        Redirect(routes.TaskList.login)
+        Redirect(routes.TaskList.login).flashing("error" -> "incorrect username/password ")
       }
     }.getOrElse(Redirect(routes.TaskList.login))
   }
