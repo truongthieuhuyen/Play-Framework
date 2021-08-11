@@ -4,7 +4,7 @@ import scala.collection.mutable
 
 
 object UserInMemory {
-  private val users = mutable.Map[String, String]("mrkable" -> "password")
+  private val users = mutable.Map[String, String]("mrkable" -> "pass")
   private val tasks = mutable.Map[String, List[String]]("mrkable" -> List("receive", "unbox", "shot"))
 
   def validateUser(username: String, password: String): Boolean = {
@@ -12,7 +12,6 @@ object UserInMemory {
   }
 
   def createUser(username: String, password: String): Boolean = {
-
     if (users.contains(username)) false
     else {
       users(username) = password

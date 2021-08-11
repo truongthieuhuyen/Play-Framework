@@ -22,10 +22,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
-  def login = Action {
-    Ok(views.html.login())
-  }
-
   def person(personName: String, personAge: Int) = Action{
       Ok(s" $personName is  $personAge years old")
   }

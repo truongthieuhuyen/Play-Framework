@@ -1,13 +1,18 @@
 @* login Template File *@
-@()
+@()(implicit request: RequestHeader)
 
 @main("Login") {
 <h2>Login</h2>
 <form method="post" action="validateLogin">
+    @helper.CSRF.formField
     Username<input type="text" name="Username">
     <br>
     Password<input type="password" name="Password">
     <br>
     <button type="submit">Submit</button>
 </form>
+<br>
+<div>
+    <button><a href="@routes.TaskList.register" style="text-decoration: none; margin: 5px;">Sign up</a></button>
+</div>
 }

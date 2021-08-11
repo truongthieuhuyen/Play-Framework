@@ -11,12 +11,10 @@ GET     /personRE/$prodType<[a-z]{2}\d\d>/:prodNum         controllers.HomeContr
 
 GET     /taskList                                       controllers.TaskList.taskList
 
-GET     /login                                          controllers.HomeController.login
 GET     /login                                          controllers.TaskList.login
 GET     /register                                       controllers.TaskList.register
-+ nocsrf
+GET     /logout                                         controllers.TaskList.logout
 POST    /validateLogin                                  controllers.TaskList.validateLogin
-+ nocsrf
 POST    /createUser                                     controllers.TaskList.createUser
 # GET     /badRequest
 # Map static resources from the /public folder to the /assets URL path

@@ -9,21 +9,25 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class TaskList @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  def login = Action {
-    Ok(views.html.login())
+  def login = Action { implicit request =>
+    Ok(views.html.login ())
   }
 
-  def register = Action{
+  def register = Action { implicit request =>
     Ok(views.html.register())
   }
 
-  def validateLogin = Action { request =>
+  def logout = Action {
+    Redirect(routes.TaskList.login).withNewSession
+  }
+
+  def validateLogin = Action { implicit request =>
     val postVals = request.body.asFormUrlEncoded
     postVals.map { args =>
       val username = args("Username").head
       val password = args("Password").head
       if (UserInMemory.validateUser(username, password)) {
-        Redirect(routes.TaskList.taskList)
+        Redirect(routes.TaskList.taskList).withSession("username" -> username)
       }
       else {
         Redirect(routes.TaskList.login)
@@ -31,13 +35,13 @@ class TaskList @Inject()(val controllerComponents: ControllerComponents) extends
     }.getOrElse(Redirect(routes.TaskList.login))
   }
 
-  def createUser = Action{ request =>
+  def createUser = Action { implicit request =>
     val postVals = request.body.asFormUrlEncoded
     postVals.map { args =>
       val username = args("Username").head
       val password = args("Password").head
       if (UserInMemory.createUser(username, password)) {
-        Redirect(routes.TaskList.taskList)
+        Redirect(routes.TaskList.taskList).withSession("username" -> username)
       }
       else {
         Redirect(routes.TaskList.register)
@@ -45,10 +49,11 @@ class TaskList @Inject()(val controllerComponents: ControllerComponents) extends
     }.getOrElse(Redirect(routes.TaskList.register))
   }
 
-  def taskList = Action {
-    val username = "mrkable"
-    val tasks = UserInMemory.getTasks(username)
-
-    Ok(views.html.taskPage(tasks))
+  def taskList = Action { implicit request =>
+    val usernameOption = request.session.get("username")
+    usernameOption.map { username =>
+      val tasks = UserInMemory.getTasks(username)
+      Ok(views.html.taskPage(tasks))
+    }.getOrElse(Redirect(routes.TaskList.login))
   }
 }
