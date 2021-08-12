@@ -10,7 +10,7 @@ import javax.inject.{Inject, Singleton}
 class TaskList @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
   def login = Action { implicit request =>
-    Ok(views.html.login ())
+    Ok(views.html.login())
   }
 
   def register = Action { implicit request =>
@@ -54,6 +54,31 @@ class TaskList @Inject()(val controllerComponents: ControllerComponents) extends
     usernameOption.map { username =>
       val tasks = UserInMemory.getTasks(username)
       Ok(views.html.taskPage(tasks))
+    }.getOrElse(Redirect(routes.TaskList.login))
+  }
+
+  def addTask = Action { implicit request =>
+    val usernameOptions = request.session.get("username")
+    usernameOptions.map { username =>
+      val postVals = request.body.asFormUrlEncoded
+      postVals.map { args =>
+        val task = args("newTask").head
+        UserInMemory.addTask(username, task)
+        Redirect(routes.TaskList.taskList)
+      }.getOrElse(Redirect(routes.TaskList.taskList))
+    }.getOrElse(Redirect(routes.TaskList.login))
+
+  }
+
+  def removeTask = Action { implicit request =>
+    val usernameOptions = request.session.get("username")
+    usernameOptions.map { username =>
+      val postVals = request.body.asFormUrlEncoded
+      postVals.map { args =>
+        val index = args("index").head.toInt
+        UserInMemory.removeTask(username,index)
+        Redirect(routes.TaskList.taskList)
+      }.getOrElse(Redirect(routes.TaskList.taskList))
     }.getOrElse(Redirect(routes.TaskList.login))
   }
 }

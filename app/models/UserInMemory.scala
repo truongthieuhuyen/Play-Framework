@@ -23,7 +23,16 @@ object UserInMemory {
     tasks.get(username).getOrElse(Nil)
   }
 
-  def addTask(username: String, task: String): Unit = ???
+  def addTask(username: String, task: String): Unit = {
+    tasks(username) = task :: tasks.get(username).getOrElse(Nil)
 
-  def removeTask(username: String, index: Int): Boolean = ???
+  }
+
+  def removeTask(username: String, index: Int): Boolean = {
+    if(index < 0 || index > tasks(username).length || tasks.get(username).isEmpty) false
+    else{
+      tasks(username) = tasks(username).patch(index,Nil,1)
+      true
+    }
+  }
 }

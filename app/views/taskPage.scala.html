@@ -2,16 +2,29 @@
 *taskPage Template File
 *@
 
-@(tasks: Seq[String])(implicit flash: Flash)
+@(tasks: Seq[String])(implicit request: RequestHeader, flash: Flash)
 
 @main("Task List") {
 <h1>Task</h1>
 
 <ul>
-    @for(item <- tasks) {
+    @for((item,idx) <- tasks.zipWithIndex) {
     <li>@item</li>
+    <form method="post" action="@routes.TaskList.removeTask">
+        @helper.CSRF.formField
+        <input type="hidden" name="index" value="@idx">
+        <input type="submit" value="Delete">
+    </form>
     }
 </ul>
+
+<form method="post" action="@routes.TaskList.addTask">
+    @helper.CSRF.formField
+    <p>Add new task</p><br>
+    <input type="text" name="newTask">
+    <input type="submit" value="Add">
+</form>
+
 <div>
     <button><a href="@routes.TaskList.logout" style="text-decoration: none; margin: 5px;">Log out</a></button>
 </div>
