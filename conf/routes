@@ -15,6 +15,7 @@ GET     /login                                          controllers.TaskList.log
 GET     /register                                       controllers.TaskList.register
 GET     /logout                                         controllers.TaskList.logout
 POST    /validateLogin                                  controllers.TaskList.validateLogin
+POST    /validateLoginForm                              controllers.TaskList.validateLoginForm
 POST    /createUser                                     controllers.TaskList.createUser
 POST    /addTask                                        controllers.TaskList.addTask
 POST    /removeTask                                     controllers.TaskList.removeTask
