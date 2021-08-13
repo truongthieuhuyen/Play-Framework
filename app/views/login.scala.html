@@ -5,9 +5,9 @@
 <h2>Login</h2>
 <form method="post" action="validateLogin">
     @helper.CSRF.formField
-    Username<input type="text" name="Username">
+    Username<input type="text" name="username" id="username-login">
     <br>
-    Password<input type="password" name="Password">
+    Password<input type="password" name="password" id="password-login">
     <br>
     <button type="submit">Submit</button>
 </form>

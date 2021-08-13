@@ -5,9 +5,9 @@
 <h2>You're new member<br> Sign up here</h2>
 <form method="post" action="createUser">
     @helper.CSRF.formField
-    Username<input type="text" name="Username">
+    Username<input type="text" name="username" id="username-reg">
     <br>
-    Password<input type="password" name="Password">
+    Password<input type="password" name="password" id="password-reg">
     <br>
     <button type="submit">Submit</button>
 </form>
