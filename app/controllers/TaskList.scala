@@ -1,7 +1,7 @@
 package controllers
 
 import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
-import models.UserInMemory
+import models.UserTaskInMemory
 import play.api.mvc.{BaseController, ControllerComponents, MessagesAbstractController, MessagesControllerComponents}
 import play.api.data._
 import play.api.data.Forms._
@@ -34,7 +34,7 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
     postVals.map { args =>
       val username = args("Username").head
       val password = args("Password").head
-      if (UserInMemory.validateUser(username, password)) {
+      if (UserTaskInMemory.validateUser(username, password)) {
         Redirect(routes.TaskList.taskList).withSession("username" -> username)
       }
       else {
@@ -47,7 +47,7 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
     loginForm.bindFromRequest().fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
       ld =>
-        if (UserInMemory.validateUser(ld.username, ld.password)) {
+        if (UserTaskInMemory.validateUser(ld.username, ld.password)) {
           Redirect(routes.TaskList.taskList).withSession("username" -> ld.username)
         }
         else {
@@ -61,7 +61,7 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
     postVals.map { args =>
       val username = args("Username").head
       val password = args("Password").head
-      if (UserInMemory.createUser(username, password)) {
+      if (UserTaskInMemory.createUser(username, password)) {
         Redirect(routes.TaskList.taskList).withSession("username" -> username)
       }
       else {
@@ -73,7 +73,7 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
   def taskList = Action { implicit request =>
     val usernameOption = request.session.get("username")
     usernameOption.map { username =>
-      val tasks = UserInMemory.getTasks(username)
+      val tasks = UserTaskInMemory.getTasks(username)
       Ok(views.html.taskPage(tasks))
     }.getOrElse(Redirect(routes.TaskList.login))
   }
@@ -84,7 +84,7 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
       val postVals = request.body.asFormUrlEncoded
       postVals.map { args =>
         val task = args("newTask").head
-        UserInMemory.addTask(username, task)
+        UserTaskInMemory.addTask(username, task)
         Redirect(routes.TaskList.taskList)
       }.getOrElse(Redirect(routes.TaskList.taskList))
     }.getOrElse(Redirect(routes.TaskList.login))
@@ -97,9 +97,13 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
       val postVals = request.body.asFormUrlEncoded
       postVals.map { args =>
         val index = args("index").head.toInt
-        UserInMemory.removeTask(username,index)
+        UserTaskInMemory.removeTask(username,index)
         Redirect(routes.TaskList.taskList)
       }.getOrElse(Redirect(routes.TaskList.taskList))
     }.getOrElse(Redirect(routes.TaskList.login))
+  }
+
+  def badRequest = Action{ implicit request =>
+    Ok(views.html.badRequest())
   }
 }

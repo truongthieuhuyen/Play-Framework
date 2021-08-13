@@ -15,9 +15,9 @@
 @helper.form(action = routes.TaskList.validateLoginForm){
     @helper.CSRF.formField
     @helper.inputText(loginForm("Username"))
-    @helper.inputText(loginForm("Password"))
+    @helper.inputPassword(loginForm("Password"))
     <div class="form-action">
-        <button type="submit" value="Login with form"></button>
+        <button type="submit" >Login with Play form</button>
     </div>
 }
 <br>

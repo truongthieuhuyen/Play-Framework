@@ -3,7 +3,7 @@ package models
 import scala.collection.mutable
 
 
-object UserInMemory {
+object UserTaskInMemory {
   private val users = mutable.Map[String, String]("mrkable" -> "pass")
   private val tasks = mutable.Map[String, List[String]]("mrkable" -> List("receive", "unbox", "shot"))
 
