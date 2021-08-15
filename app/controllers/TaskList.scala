@@ -32,8 +32,8 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
   def validateLogin = Action { implicit request =>
     val postVals = request.body.asFormUrlEncoded
     postVals.map { args =>
-      val username = args("Username").head
-      val password = args("Password").head
+      val username = args("username").head
+      val password = args("password").head
       if (UserTaskInMemory.validateUser(username, password)) {
         Redirect(routes.TaskList.taskList).withSession("username" -> username)
       }
