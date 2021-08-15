@@ -20,10 +20,9 @@ class TaskListSpec extends PlaySpec with GuiceOneServerPerSuite with OneBrowserP
         println("In eventually")
         println(currentUrl)
         pageTitle mustBe("Task List")
-        println("Title passed")
         find(cssSelector("h1")).isEmpty mustBe(false)
-        println("found h2")
         find(cssSelector("h1")).foreach(e => e.text mustBe "Task")
+        findAll(cssSelector("li")).toList.map(_.text) mustBe(List("receive", "unbox", "shot"))
       }
     }
   }

@@ -5,23 +5,27 @@
 <h2>Login</h2>
 <form method="post" action="validateLogin">
     @helper.CSRF.formField
-    Username<input type="text" name="username" id="username-login">
+    <p>User name</p>
+    <input type="text" name="username" id="username-login" style="margin-bottom: 12px">
     <br>
-    Password<input type="password" name="password" id="password-login">
+    <p>Password</p>
+    <input type="password" name="password" id="password-login" style="margin-bottom: 12px">
     <br>
     <button type="submit">Submit</button>
 </form>
 <br>
+<h2 style="background-color: orange; padding: 15px">Login with Play form</h2>
 @helper.form(action = routes.TaskList.validateLoginForm){
     @helper.CSRF.formField
     @helper.inputText(loginForm("Username"))
     @helper.inputPassword(loginForm("Password"))
     <div class="form-action">
-        <button type="submit" >Login with Play form</button>
+        <button type="submit" >Submit</button>
     </div>
 }
 <br>
 <div>
+    <h3 style="background-color: red">Register now!</h3>
     <button><a href="@routes.TaskList.register" style="text-decoration: none; margin: 5px;">Sign up</a></button>
 </div>
 }
