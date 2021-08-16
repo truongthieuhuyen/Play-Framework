@@ -8,6 +8,7 @@ GET     /                                                  controllers.HomeContr
 GET     /person                                            controllers.HomeController.person(prodType, prodNum: Int)
 GET     /perosn/:prodType/:prodNum                         controllers.HomeController.person(prodType, prodNum: Int)
 GET     /personRE/$prodType<[a-z]{2}\d\d>/:prodNum         controllers.HomeController.person(prodType, prodNum: Int)
+GET     /random                                            controllers.HomeController.random
 
 GET     /taskList                                       controllers.TaskList.taskList
 
