@@ -31,4 +31,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def random() =Action{
     Ok(util.Random.nextInt(100).toString)
   }
+
+  def randomString(length: Int) = Action{
+    Ok(util.Random.nextString(length))
+  }
 }
