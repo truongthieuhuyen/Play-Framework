@@ -17,5 +17,8 @@ function register(){
 
 function deleteTask(index){
     $("#contents").load("/deleteTask2?index="+index)
-    console.log("get thing to delete")
+}
+function addNewTask(){
+    const task = $("#newTask").val()
+    $("#contents").load("/addTask2?task="+task);
 }

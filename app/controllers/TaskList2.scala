@@ -12,6 +12,9 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
   def login2 = Action {
     Ok(views.html.login2())
   }
+  def logout = Action{
+    Redirect(routes.TaskList2.login2).withNewSession
+  }
 
   def validateUser(username: String, password: String) = Action {
     if (UserTaskInMemory.validateUser(username, password)) {
@@ -22,7 +25,7 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     }
   }
 
-  def createUser(username: String, password: String) = Action{
+  def createUser(username: String, password: String) = Action {
     if (UserTaskInMemory.createUser(username, password)) {
       Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username))).withSession("username" -> username)
     }
@@ -31,7 +34,19 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     }
   }
 
-  def deleteTask(index: Int) =Action{ implicit request =>
-    Ok("deleting")
+  def deleteTask(index: Int) = Action { implicit request =>
+    val usernameOptions = request.session.get("username")
+    usernameOptions.map { username =>
+      UserTaskInMemory.removeTask(username, index)
+      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+    }.getOrElse(Redirect(routes.TaskList2.login2))
+  }
+
+  def addTask(task: String) = Action{ implicit request =>
+    val usernameOptions = request.session.get("username")
+    usernameOptions.map { username =>
+      UserTaskInMemory.addTask(username, task)
+      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+    }.getOrElse(Redirect(routes.TaskList2.login2))
   }
 }
