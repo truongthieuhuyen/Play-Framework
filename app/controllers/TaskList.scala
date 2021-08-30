@@ -5,7 +5,6 @@ import models.UserTaskInMemory
 import play.api.mvc.{BaseController, ControllerComponents, MessagesAbstractController, MessagesControllerComponents}
 import play.api.data._
 import play.api.data.Forms._
-
 import javax.inject.{Inject, Singleton}
 
 case class LoginData(username: String, password: String)
@@ -51,7 +50,7 @@ class TaskList @Inject()(val cc: MessagesControllerComponents) extends MessagesA
           Redirect(routes.TaskList.taskList).withSession("username" -> ld.username)
         }
         else {
-          Redirect(routes.TaskList.login).flashing("error" -> "incorrect username/password ")
+          Redirect(routes.TaskList.login).flashing("error" -> "\n\n\n\n\n\n\n\n\n\n\n\n incorrect username/password ")
         }
     )
   }

@@ -25,8 +25,10 @@ POST    /removeTask                                     controllers.TaskList.rem
 GET     /badRequest                                     controllers.TaskList.badRequest
 
 #Routes for v2
-GET     /load                                           controllers.TaskListTheSecond.load
-GET     /login2                                         controllers.TaskListTheSecond.login
-
+GET     /load2                                          controllers.TaskList2.load
+GET     /login2                                         controllers.TaskList2.login2
+GET     /validate2                                      controllers.TaskList2.validateUser(username,password)
+GET     /create2                                        controllers.TaskList2.createUser(username,password)
+GET     /deleteTask2                                    controllers.TaskList2.deleteTask(index:Int)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
