@@ -9,11 +9,14 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     Ok(views.html.mainV2())
   }
 
-  def login2 = Action {
+  def login = Action {
     Ok(views.html.login2())
   }
   def logout = Action{
-    Redirect(routes.TaskList2.login2).withNewSession
+    Redirect(routes.TaskList2.load).withNewSession
+  }
+  def register =Action{
+    Ok(views.html.register2())
   }
 
   def validateUser(username: String, password: String) = Action {
@@ -39,7 +42,7 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     usernameOptions.map { username =>
       UserTaskInMemory.removeTask(username, index)
       Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-    }.getOrElse(Redirect(routes.TaskList2.login2))
+    }.getOrElse(Redirect(routes.TaskList2.login))
   }
 
   def addTask(task: String) = Action{ implicit request =>
@@ -47,6 +50,6 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     usernameOptions.map { username =>
       UserTaskInMemory.addTask(username, task)
       Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-    }.getOrElse(Redirect(routes.TaskList2.login2))
+    }.getOrElse(Redirect(routes.TaskList2.login))
   }
 }

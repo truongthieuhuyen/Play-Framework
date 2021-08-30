@@ -26,8 +26,9 @@ GET     /badRequest                                     controllers.TaskList.bad
 
 #Routes for v2
 GET     /load2                                          controllers.TaskList2.load
-GET     /login2                                         controllers.TaskList2.login2
-GET     /logout                                         controllers.TaskList2.logout
+GET     /login2                                         controllers.TaskList2.login
+GET     /register2                                      controllers.TaskList2.register
+GET     /logout2                                        controllers.TaskList2.logout
 GET     /validate2                                      controllers.TaskList2.validateUser(username,password)
 GET     /create2                                        controllers.TaskList2.createUser(username,password)
 GET     /deleteTask2                                    controllers.TaskList2.deleteTask(index:Int)
