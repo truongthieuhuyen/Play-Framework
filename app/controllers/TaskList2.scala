@@ -19,13 +19,20 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     Ok(views.html.register2())
   }
 
-  def validateUser(username: String, password: String) = Action {
-    if (UserTaskInMemory.validateUser(username, password)) {
-      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username))).withSession("username" -> username)
-    }
-    else {
-      Ok(views.html.login2())
-    }
+  def validateUser = Action {implicit request =>
+    val postVals = request.body.asFormUrlEncoded
+    postVals.map { args =>
+      val username = args("username").head
+      val password = args("password").head
+      if (UserTaskInMemory.validateUser(username, password)) {
+        Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username))).withSession("username" -> username)
+      }
+      else {
+        Ok(views.html.login2())
+      }
+    }.getOrElse(Ok(views.html.login2()))
+
+
   }
 
   def createUser(username: String, password: String) = Action {
@@ -51,5 +58,8 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
       UserTaskInMemory.addTask(username, task)
       Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
     }.getOrElse(Redirect(routes.TaskList2.login))
+  }
+  def generatedJS = Action{
+    Ok(views.js.generatedJS())
   }
 }

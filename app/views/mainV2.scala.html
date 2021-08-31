@@ -1,11 +1,14 @@
 @*
 * mainV2 Template File
 *@
-@()(implicit flash: Flash)
+@()(implicit request: RequestHeader ,flash: Flash)
 
 @main("Task List [version 2]"){
     <div id="contents"></div>
 
+    <input id="csrfToken" type="hidden" value="@helper.CSRF.getToken.value">
+    <input id="loginRoute" type="hidden" value="@routes.TaskList2.login()">
+    <input id="validateRoute" type="hidden" value="@routes.TaskList2.validateUser()">
 
     <script src="@routes.Assets.versioned("javascripts/v2.js")" type="text/javascript"></script>
 }
