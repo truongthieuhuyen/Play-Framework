@@ -20,7 +20,10 @@ function register(){
     console.log("starting do register");
     const username = $("#registerName").val();
     const password = $("#registerPass").val();
-    $.post(create);
+    $.post(createRoute,
+        {username, password, csrfToken},
+        data => {$("#contents").html(data);}
+    );
 }
 
 function deleteTask(index){

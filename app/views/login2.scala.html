@@ -1,5 +1,5 @@
 @* login2 Template File *@
-@()
+@(implicit request: RequestHeader)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,9 +18,14 @@
     <br>
     <button type="submit" onclick="login()" style="background-color: #ff2d1a; padding: 5px">Confirm</button>
 </div>
+
+<h2>Create User :</h2>
 <div>
-    <h3>Create new account.Register now</h3>
-    <button type="submit"><a href="@routes.TaskList2.register">Sign up</a></button>
+    Username<input type="text" id="registerName">
+    <br>
+    Password<input type="password" id="registerPass">
+    <br>
+    <button type="submit" onclick="register()" style="background-color: #ff2d1a; padding: 5px">Create </button>
 </div>
 
 
