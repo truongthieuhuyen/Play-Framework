@@ -6,60 +6,83 @@ import models.UserTaskInMemory
 
 class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractController(cc) {
   def load = Action { implicit request =>
-    Ok(views.html.mainV2())
+    val usernameOptions = request.session.get("username")
+    usernameOptions.map { username =>
+
+      Ok(views.html.mainV2())
+    }.getOrElse(Ok(views.html.mainV2(routes.TaskList2.login.toString)))
   }
 
   def login = Action {
     Ok(views.html.login2())
   }
-  def logout = Action{
+
+  def logout = Action {
     Redirect(routes.TaskList2.load).withNewSession
   }
-  def register =Action{
+
+  def register = Action {
     Ok(views.html.register2())
   }
 
-  def validateUser = Action {implicit request =>
+  def validateUser = Action { implicit request =>
     val postVals = request.body.asFormUrlEncoded
     postVals.map { args =>
       val username = args("username").head
       val password = args("password").head
       if (UserTaskInMemory.validateUser(username, password)) {
-        Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username))).withSession("username" -> username)
+        Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+          .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.value)
       }
       else {
         Ok(views.html.login2())
       }
     }.getOrElse(Ok(views.html.login2()))
 
+  }
+
+  def createUser = Action { implicit request =>
+    val postVals = request.body.asFormUrlEncoded
+    postVals.map { args =>
+      val username = args("Username").head
+      val password = args("Password").head
+      if (UserTaskInMemory.createUser(username, password)) {
+        Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+          .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.value)
+      }
+      else {
+        Ok(views.html.register2())
+      }
+    }.getOrElse(Ok(views.html.register2()))
 
   }
 
-  def createUser(username: String, password: String) = Action {
-    if (UserTaskInMemory.createUser(username, password)) {
-      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username))).withSession("username" -> username)
-    }
-    else {
-      Ok(views.html.register2())
-    }
-  }
-
-  def deleteTask(index: Int) = Action { implicit request =>
+  def deleteTask = Action { implicit request =>
     val usernameOptions = request.session.get("username")
     usernameOptions.map { username =>
-      UserTaskInMemory.removeTask(username, index)
-      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-    }.getOrElse(Redirect(routes.TaskList2.login))
+      val postVals = request.body.asFormUrlEncoded
+      postVals.map { args =>
+        val index = args("index").head.toInt
+        UserTaskInMemory.removeTask(username, index)
+        Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+      }.getOrElse(Ok(views.html.login2()))
+    }.getOrElse(Ok(views.html.login2()))
+
   }
 
-  def addTask(task: String) = Action{ implicit request =>
+  def addTask(task: String) = Action { implicit request =>
     val usernameOptions = request.session.get("username")
     usernameOptions.map { username =>
-      UserTaskInMemory.addTask(username, task)
-      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-    }.getOrElse(Redirect(routes.TaskList2.login))
+      val postVals = request.body.asFormUrlEncoded
+      postVals.map { args =>
+        val index = args("index").head
+        UserTaskInMemory.addTask(username, task)
+        Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+      }.getOrElse(Ok(views.html.login2()))
+    }.getOrElse(Ok(views.html.login2()))
   }
-  def generatedJS = Action{
+
+  def generatedJS = Action {
     Ok(views.js.generatedJS())
   }
 }
