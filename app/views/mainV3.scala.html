@@ -1,0 +1,49 @@
+@*
+* mainV3 Template File
+*@
+@()(implicit request: RequestHeader ,flash: Flash)
+
+@main("Task List [version 3]"){
+<div id="contents">version 3</div>
+
+<div id="login-section">
+    <h2>Login:</h2>
+    <br>
+    Username<input type="text" id="loginName">
+    <br>
+    Password<input type="password" id="loginPass">
+    <br>
+    <button onclick="login()">Login</button>
+
+    <h2>Create new account:</h2>
+    <br>
+    Username<input type="text" id="registerName">
+    <br>
+    Password<input type="password" id="registerPass">
+    <br>
+    <button onclick="login()">Register</button>
+</div>
+
+<div id="task-section" hidden>
+    <h1>Task</h1>
+    <ul id="task-list">
+    </ul>
+
+    <p>Add new task</p>
+    <input type="text" id="newTask">
+    <button type="submit" value="Add" onclick="addNewTask()">Add</button>
+
+    <div>
+        <button><a href="@routes.TaskList2.logout" style="text-decoration: none; margin: 5px;">Log out</a></button>
+    </div>
+</div>
+
+<input id="csrfToken" type="hidden" value="@helper.CSRF.getToken.value">
+<input id="validateRoute" type="hidden" value="@routes.TaskList3.validateUser">
+<input id="createRoute" type="hidden" value="@routes.TaskList2.createUser">
+<input id="deleteRoute" type="hidden" value="@routes.TaskList2.deleteTask">
+<input id="addRoute" type="hidden" value="@routes.TaskList2.addTask">
+
+
+<script src="@routes.Assets.versioned("javascripts/v3.js")" type="text/javascript"></script>
+}

@@ -11,6 +11,7 @@ libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
 libraryDependencies ++= Seq(
   jdbc,
+  "com.typesafe.play" %% "play-json" % "2.8.1",
 //  "mysql" % "mysql-connector-java" % "5.1.41"
 )
 
