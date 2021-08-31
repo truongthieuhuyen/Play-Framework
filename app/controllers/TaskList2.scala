@@ -1,5 +1,6 @@
 package controllers
 
+import akka.util.Helpers.Requiring
 import javax.inject.Inject
 import play.api.mvc._
 import models.UserTaskInMemory
@@ -9,8 +10,16 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     val usernameOptions = request.session.get("username")
     usernameOptions.map { username =>
 
-      Ok(views.html.mainV2())
+      Ok(views.html.mainV2(routes.TaskList2.getTask.toString))
     }.getOrElse(Ok(views.html.mainV2(routes.TaskList2.login.toString)))
+  }
+
+  def getTask = Action{ implicit request =>
+    val usernameOptions = request.session.get("username")
+    usernameOptions.map { username =>
+
+      Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
+    }.getOrElse(Ok(views.html.login2()))
   }
 
   def login = Action {
@@ -32,7 +41,7 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
       val password = args("password").head
       if (UserTaskInMemory.validateUser(username, password)) {
         Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-          .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.value)
+          .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.value.toString)
       }
       else {
         Ok(views.html.login2())
@@ -48,7 +57,7 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
       val password = args("Password").head
       if (UserTaskInMemory.createUser(username, password)) {
         Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-          .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.value)
+          .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.value.toString)
       }
       else {
         Ok(views.html.register2())
@@ -70,12 +79,12 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
 
   }
 
-  def addTask(task: String) = Action { implicit request =>
+  def addTask = Action { implicit request =>
     val usernameOptions = request.session.get("username")
     usernameOptions.map { username =>
       val postVals = request.body.asFormUrlEncoded
       postVals.map { args =>
-        val index = args("index").head
+        val task = args("task").head
         UserTaskInMemory.addTask(username, task)
         Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
       }.getOrElse(Ok(views.html.login2()))

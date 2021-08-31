@@ -13,7 +13,7 @@ function login(){
     const password = $("#loginPass").val();
     $.post(validateRoute,
         {username, password, csrfToken},
-        data => {$("#contents").html(data)};
+        data => {$("#contents").html(data);}
     );
 }
 function register(){
