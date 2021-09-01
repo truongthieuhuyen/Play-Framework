@@ -1,15 +1,7 @@
 @* login2 Template File *@
-@(implicit request: RequestHeader)
+@()(implicit request: RequestHeader)
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LOG IN V2</title>
 
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
-</head>
-<body>
 <h2>Log in :</h2>
 <div>
     Username<input type="text" id="loginName">
@@ -28,8 +20,3 @@
     <button type="submit" onclick="register()" style="background-color: #ff2d1a; padding: 5px">Create </button>
 </div>
 
-
-<!--<script src="@routes.Assets.versioned("javascripts/v2.js")" type="text/javascript"></script>-->
-
-</body>
-</html>
