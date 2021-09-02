@@ -8,11 +8,11 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.13.6"
 
 libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 libraryDependencies ++= Seq(
   jdbc,
-  "com.typesafe.play" %% "play-json" % "2.8.1",
-//  "mysql" % "mysql-connector-java" % "5.1.41"
+  "com.typesafe.play" %% "play-json" % "2.9.2",
+  "mysql" % "mysql-connector-java" % "8.0.22",
 )
 
 // Adds additional packages into Twirl

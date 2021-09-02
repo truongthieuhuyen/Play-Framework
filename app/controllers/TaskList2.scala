@@ -14,7 +14,7 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
   }
 
   def login = Action { implicit request =>
-    Ok(views.html.login2(request))
+    Ok(views.html.login2())
   }
 
   def logout = Action {
@@ -25,7 +25,7 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
     val usernameOptions = request.session.get("username")
     usernameOptions.map { username =>
       Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-    }.getOrElse(Ok(views.html.login2(request)))
+    }.getOrElse(Ok(views.html.login2()))
   }
 
 
@@ -43,9 +43,9 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
           .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
       }
       else {
-        Ok(views.html.login2(request))
+        Ok(views.html.login2())
       }
-    }.getOrElse(Ok(views.html.login2(request)))
+    }.getOrElse(Ok(views.html.login2()))
 
   }
 
@@ -59,9 +59,9 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
           .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
       }
       else {
-        Ok(views.html.login2(request))
+        Ok(views.html.login2())
       }
-    }.getOrElse(Ok(views.html.login2(request)))
+    }.getOrElse(Ok(views.html.login2()))
 
   }
 
@@ -73,8 +73,8 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
         val index = args("index").head.toInt
         UserTaskInMemory.removeTask(username, index)
         Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-      }.getOrElse(Ok(views.html.login2(request)))
-    }.getOrElse(Ok(views.html.login2(request)))
+      }.getOrElse(Ok(views.html.login2()))
+    }.getOrElse(Ok(views.html.login2()))
   }
 
   def addTask = Action { implicit request =>
@@ -85,8 +85,8 @@ class TaskList2 @Inject()(val cc: ControllerComponents) extends AbstractControll
         val task = args("task").head
         UserTaskInMemory.addTask(username, task)
         Ok(views.html.taskPage2(UserTaskInMemory.getTasks(username)))
-      }.getOrElse(Ok(views.html.login2(request)))
-    }.getOrElse(Ok(views.html.login2(request)))
+      }.getOrElse(Ok(views.html.login2()))
+    }.getOrElse(Ok(views.html.login2()))
   }
 
   def generatedJS = Action {
