@@ -59,11 +59,25 @@ class TaskList3 @Inject()( cc: ControllerComponents) extends AbstractController(
     }
   }
 
-  def addTask {
-    TODO
+  def addTask = Action{ implicit request =>
+    withSessionUsername(username =>
+      withJsonBody[String] { task =>
+        UserTaskInMemory.addTask(username,task);
+        Ok(Json.toJson(true))
+      }
+    )
   }
 
-  def delete{TODO}
+  def delete = Action{implicit request =>
+    withSessionUsername(username =>
+      withJsonBody[Int] { index =>
+        UserTaskInMemory.removeTask(username,index)
+        Ok(Json.toJson(true))
+      }
+    )
+  }
 
-  def logout{TODO}
+  def logout = Action {implicit request =>
+    Ok(Json.toJson(true)).withSession(request.session - "username")
+  }
 }
