@@ -34,16 +34,17 @@
     <button type="submit" value="Add" onclick="addNewTask()">Add</button>
 
     <div>
-        <button><a href="@routes.TaskList2.logout" style="text-decoration: none; margin: 5px;">Log out</a></button>
+        <button><a href="@routes.TaskList2.logout" style="text-decoration: none; margin: 5px;" onclick="logout()">Log out</a></button>
     </div>
 </div>
 
 <input id="csrfToken" type="hidden" value="@helper.CSRF.getToken.value">
 <input id="validateRoute" type="hidden" value="@routes.TaskList3.validateUser">
-<input id="createRoute" type="hidden" value="@routes.TaskList2.createUser">
+<input id="createRoute" type="hidden" value="@routes.TaskList3.createUser">
 <input id="taskRoute" type="hidden" value="@routes.TaskList3.taskList">
-<input id="deleteRoute" type="hidden" value="@routes.TaskList2.deleteTask">
-<input id="addRoute" type="hidden" value="@routes.TaskList2.addTask">
+<input id="deleteRoute" type="hidden" value="@routes.TaskList3.deleteTask">
+<input id="addRoute" type="hidden" value="@routes.TaskList3.addTask">
+<input type="hidden" id="logoutRoute" value="@routes.TaskList3.logout()">
 
 
 <script src="@routes.Assets.versioned("javascripts/v3.js")" type="text/javascript"></script>
