@@ -11,8 +11,12 @@ libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 libraryDependencies ++= Seq(
   jdbc,
+  "com.typesafe.play" %% "play-slick" % "5.0.0",
+  "com.typesafe.slick" %% "slick-codegen" % "3.3.3",
   "com.typesafe.play" %% "play-json" % "2.9.2",
   "mysql" % "mysql-connector-java" % "8.0.22",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3",
+  "org.mindrot" % "jbcrypt" % "0.4",
 )
 
 // Adds additional packages into Twirl
