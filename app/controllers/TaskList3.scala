@@ -68,7 +68,7 @@ class TaskList3 @Inject()( cc: ControllerComponents) extends AbstractController(
     )
   }
 
-  def delete = Action{implicit request =>
+  def deleteTask = Action{implicit request =>
     withSessionUsername(username =>
       withJsonBody[Int] { index =>
         UserTaskInMemory.removeTask(username,index)
