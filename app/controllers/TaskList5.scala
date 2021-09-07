@@ -1,15 +1,15 @@
 package controllers
 
-import javax.inject.Inject
+import javax.inject._
 import models._
 import play.api.mvc._
 import play.api.libs.json._
+import slick.jdbc.JdbcProfile
+import slick.jdbc.MySQLProfile.api._
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 
 import scala.concurrent.Future
-//import play.api.db.slick.DatabaseConfigProvider
-
 import scala.concurrent.ExecutionContext
-//import play.api.db.slick.HasDatabaseConfigProvider
 
 
 @Singleton
@@ -19,6 +19,7 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   private val model = new TaskDatabaseModel(db)
 
   def load = Action { implicit request =>
+
     Ok(views.html.mainV5())
   }
 
@@ -29,67 +30,71 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     request.body.asJson.map { body =>
       Json.fromJson[A](body) match {
         case JsSuccess(a, path) => f(a)
-        case e@JsError(_) => Future.successful(Redirect(routes.TaskList3.load))
+        case e @ JsError(_) => Future.successful(Redirect(routes.TaskList3.load))
       }
     }.getOrElse(Future.successful(Redirect(routes.TaskList3.load)))
   }
 
-  def withSessionUsername(f: String => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
-    request.session.get("username").map(f).getOrElse(Future.successful(Ok(Json.toJson(Seq.empty[String]))))
+  def withSessionUsername(f: String => Result)(implicit request: Request[AnyContent]) = {
+    request.session.get("username").map(f).getOrElse(Ok(Json.toJson(Seq.empty[String])))
   }
 
-  def withSessionUserid(f: Int => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
+  def withSessionUserid(f: Int => Result)(implicit request: Request[AnyContent]) = {
     request.session.get("userid").map(userid => f(userid.toInt)).getOrElse(Future.successful(Ok(Json.toJson(Seq.empty[String]))))
   }
 
   def validate = Action.async { implicit request =>
     withJsonBody[UserData] { ud =>
-      model.validateUser(ud.username, ud.password).map { ouserId =>
-        ouserId match {
-          case Some(userid) => Ok(Json.toJson(true))
-            .withSession("username" -> ud.username, "userid" -> userid.toString, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
-          case None => Ok(Json.toJson(false))
+      model.validateUser(ud.username,ud.password).map { userExists =>
+        if (userExists) {
+          Ok(Json.toJson(true))
+            .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
+        } else {
+          Ok(Json.toJson(false))
         }
       }
     }
   }
 
-  def createUser = Action.async { implicit request =>
-    withJsonBody[UserData] { ud =>
-      model.createUser(ud.username, ud.password).map { ouserId =>
-        ouserId match {
-          case Some(userid) =>
-            Ok(Json.toJson(true))
-              .withSession("username" -> ud.username, "userid" -> userid.toString, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
-          case None =>
-            Ok(Json.toJson(false))
-        }
-      }
-    }
-  }
+  def createUser = TODO
+//    Action.async { implicit request =>
+//    withJsonBody[UserData] { ud =>
+//      if (UserTaskInMemory.createUser(ud.username, ud.password)) {
+//        Ok(Json.toJson(true))
+//          .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
+//      } else {
+//        Ok(Json.toJson(false))
+//      }
+//    }
+//  }
 
-  def taskList = Action.async { implicit request =>
-    withSessionUsername { username =>
-      println("!!! Getting tasks")
-      model.getTasks(username).map(tasks => Ok(Json.toJson(tasks)))
-    }
-  }
+  def taskList = TODO
+//    Action { implicit request =>
+//    withSessionUsername { username =>
+//      println("!!! Getting tasks")
+//      Ok(Json.toJson(UserTaskInMemory.getTasks(username)))
+//    }
+//  }
 
-  def addTask = Action.async { implicit request =>
-    withSessionUserid { userid =>
-      withJsonBody[String] { task =>
-        model.addTask(userid, task).map(count => Ok(Json.toJson(count > 0)))
-      }
-    }
-  }
+  def addTask = TODO
+//    Action { implicit request =>
+//    withSessionUsername { username =>
+//      withJsonBody[String] { task =>
+//        UserTaskInMemory.addTask(username,task);
+//        Ok(Json.toJson(true))
+//      }
+//    }
+//  }
 
-  def deleteTask = Action.async { implicit request =>
-    withSessionUsername { username =>
-      withJsonBody[Int] { itemId =>
-        model.removeTask(itemId).map(removed => Ok(Json.toJson(removed)))
-      }
-    }
-  }
+  def deleteTask = TODO
+//    Action { implicit request =>
+//    withSessionUsername(username =>
+//      withJsonBody[Int] { index =>
+//        UserTaskInMemory.removeTask(username,index)
+//        Ok(Json.toJson(true))
+//      }
+//    )
+//  }
 
   def logout = Action { implicit request =>
     Ok(Json.toJson(true)).withSession(request.session - "username")
