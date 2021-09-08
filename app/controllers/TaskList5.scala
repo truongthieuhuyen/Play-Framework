@@ -8,8 +8,7 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
+import scala.concurrent._
 
 
 @Singleton
@@ -45,11 +44,11 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   def validate = Action.async { implicit request =>
     withJsonBody[UserData] { ud =>
       model.validateUser(ud.username,ud.password).map { userExists =>
-        if (userExists) {
-          Ok(Json.toJson(true))
-            .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
-        } else {
-          Ok(Json.toJson(false))
+        userExists match {
+          case Some(userId) => Ok(Json.toJson(true))
+            .withSession("username" -> ud.username, "userId" -> userId.toString, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
+          case None =>
+            Ok(Json.toJson(false))
         }
       }
     }
@@ -68,35 +67,32 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     }
   }
 
-  def taskList = TODO
-//    Action { implicit request =>
-//    withSessionUsername { username =>
-//      println("!!! Getting tasks")
-//      Ok(Json.toJson(UserTaskInMemory.getTasks(username)))
-//    }
-//  }
+  def taskList = Action.async { implicit request =>
+    withSessionUsername { username =>
+      println("!!! Getting tasks")
+      model.getTasks(username).map(tasks => Ok(Json.toJson(tasks)))
+    }
+  }
 
-  def addTask = TODO
-//    Action { implicit request =>
-//    withSessionUsername { username =>
-//      withJsonBody[String] { task =>
-//        UserTaskInMemory.addTask(username,task);
-//        Ok(Json.toJson(true))
-//      }
-//    }
-//  }
+  def addTask = Action.async { implicit request =>
+    withSessionUserid{ userid =>
+      withJsonBody[String] { task =>
+        model.addTask(userid,task).map(count => Ok(Json.toJson(count > 1)))
+      }
+    }
+  }
 
-  def deleteTask = TODO
-//    Action { implicit request =>
-//    withSessionUsername(username =>
-//      withJsonBody[Int] { index =>
-//        UserTaskInMemory.removeTask(username,index)
-//        Ok(Json.toJson(true))
-//      }
-//    )
-//  }
+  def deleteTask = Action.async() { implicit request =>
+    withSessionUsername(username =>
+      withJsonBody[Int] { itemId =>
+        model.removeTask(itemId).map(removed => Ok(Json.toJson(removed)))
+        Ok(Json.toJson(true))
+      }
+    )
+  }
 
   def logout = Action { implicit request =>
+    // need to change the route
     Ok(Json.toJson(true)).withSession(request.session - "username")
   }
 
