@@ -18,11 +18,11 @@
 
     <h2>Create new account:</h2>
     <br>
-    Username<input type="text" id="registerName">
+    Username<input type="text" id="createName">
     <br>
-    Password<input type="password" id="registerPass">
+    Password<input type="password" id="createPass">
     <br>
-    <button onclick="login()">Register</button>
+    <button onclick="createUser()">Register</button>
     <span id="create-message"></span>
 </div>
 
@@ -36,7 +36,7 @@
     <button type="submit" value="Add" onclick="addNewTask()">Add</button>
     <span id="task-message"></span>
     <div>
-        <button><a href="@routes.TaskList2.logout" style="text-decoration: none; margin: 5px;" onclick="logout()">Log out</a></button>
+        <button onclick="logout()">Logout</button>
     </div>
 </div>
 

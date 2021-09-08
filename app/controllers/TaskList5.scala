@@ -19,7 +19,6 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   private val model = new TaskDatabaseModel(db)
 
   def load = Action { implicit request =>
-
     Ok(views.html.mainV5())
   }
 
@@ -56,17 +55,18 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     }
   }
 
-  def createUser = TODO
-//    Action.async { implicit request =>
-//    withJsonBody[UserData] { ud =>
-//      if (UserTaskInMemory.createUser(ud.username, ud.password)) {
-//        Ok(Json.toJson(true))
-//          .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
-//      } else {
-//        Ok(Json.toJson(false))
-//      }
-//    }
-//  }
+  def createUser = Action.async { implicit request =>
+    withJsonBody[UserData] { ud =>
+      model.createUser(ud.username,ud.password).map { userCreated =>
+        if (userCreated) {
+          Ok(Json.toJson(true))
+            .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
+        } else {
+          Ok(Json.toJson(false))
+        }
+      }
+    }
+  }
 
   def taskList = TODO
 //    Action { implicit request =>
