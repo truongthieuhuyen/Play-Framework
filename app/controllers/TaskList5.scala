@@ -67,29 +67,32 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     }
   }
 
-  def taskList = Action.async { implicit request =>
-    withSessionUsername { username =>
-      println("!!! Getting tasks")
-      model.getTasks(username).map(tasks => Ok(Json.toJson(tasks)))
-    }
-  }
+  def taskList = TODO
+//    Action.async { implicit request =>
+//    withSessionUsername { username =>
+//      println("!!! Getting tasks")
+//      model.getTasks(username).map(tasks => Ok(Json.toJson(tasks)))
+//    }
+//  }
 
-  def addTask = Action.async { implicit request =>
-    withSessionUserid{ userid =>
-      withJsonBody[String] { task =>
-        model.addTask(userid,task).map(count => Ok(Json.toJson(count > 1)))
-      }
-    }
-  }
+  def addTask = TODO
+//  Action.async { implicit request =>
+//    withSessionUserid{ userid =>
+//      withJsonBody[String] { task =>
+//        model.addTask(userid,task).map(count => Ok(Json.toJson(count > 1)))
+//      }
+//    }
+//  }
 
-  def deleteTask = Action.async() { implicit request =>
-    withSessionUsername(username =>
-      withJsonBody[Int] { itemId =>
-        model.removeTask(itemId).map(removed => Ok(Json.toJson(removed)))
-        Ok(Json.toJson(true))
-      }
-    )
-  }
+  def deleteTask = TODO
+//    Action.async { implicit request =>
+//    withSessionUsername(username =>
+//      withJsonBody[Int] { itemId =>
+//        model.removeTask(itemId).map(removed => Ok(Json.toJson(removed)))
+//        Ok(Json.toJson(true))
+//      }
+//    )
+//  }
 
   def logout = Action { implicit request =>
     // need to change the route

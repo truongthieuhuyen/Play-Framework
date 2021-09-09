@@ -17,6 +17,11 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "8.0.22",
   "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3",
   "org.mindrot" % "jbcrypt" % "0.4",
+
+  "org.scalikejdbc" %% "scalikejdbc" % "3.5.0",
+  "org.scalikejdbc" %% "scalikejdbc-config" % "3.5.0",
+  "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.5.1",
+  "org.scalikejdbc" %% "scalikejdbc-test" % "3.5.0" % "test"
 )
 
 // Adds additional packages into Twirl

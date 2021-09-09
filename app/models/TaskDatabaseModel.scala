@@ -10,7 +10,7 @@ class TaskDatabaseModel (db: Database)(implicit ec: ExecutionContext){
   def validateUser(username: String, password: String): Future[Option[Int]] = {
     val matches = db.run(Users.filter(userRow => userRow.username === username ).result)
     matches.map(userRows => userRows.headOption.map {
-      userRow => if (BCrypt.checkpw(password, userRow.password)) Some(userRow.userId) else None
+      userRow => if (BCrypt.checkpw(password, userRow.password)) userRow.userId else 0
     })
   }
 
@@ -18,7 +18,8 @@ class TaskDatabaseModel (db: Database)(implicit ec: ExecutionContext){
     val matches = db.run(Users.filter(UsersRow => UsersRow.username === username ).result)
     matches.flatMap{userRows =>
       if (userRows.nonEmpty){
-        db.run(Users += UsersRow(-1, username, BCrypt.hashpw(password, BCrypt.gensalt())))
+//        val stt = db.run(Users.filter(UsersRow => UsersRow.userId === userRows.indexOf() + 1).result)
+        db.run(Users += UsersRow(1, username, BCrypt.hashpw(password, BCrypt.gensalt())))
           .map(addCount => addCount > 0)
       } else Future.successful(false)
     }
@@ -27,7 +28,7 @@ class TaskDatabaseModel (db: Database)(implicit ec: ExecutionContext){
   def getTasks(username: String): Future[Seq[String]] = {
     db.run(
       (for {
-        user <- Users if user.username === username;
+        user <- Users if user.username === username
         item <- Items if item.userId === user.userId
       } yield {
         item.text
