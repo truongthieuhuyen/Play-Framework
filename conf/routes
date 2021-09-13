@@ -48,11 +48,20 @@ GET     /logout3                                        controllers.TaskList3.lo
 
 #routes for v5
 GET     /load5                                          controllers.TaskList5.load
-POST    /validate5                                      controllers.TaskList5.validate
-POST    /create5                                        controllers.TaskList5.createUser
-GET     /taskList5                                      controllers.TaskList5.taskList
-POST    /addTask5                                       controllers.TaskList5.addTask
-POST    /deleteTask5                                    controllers.TaskList5.deleteTask
-GET     /logout5                                        controllers.TaskList5.logout
+    POST    /validate5                                      controllers.TaskList5.validate
+    POST    /create5                                        controllers.TaskList5.createUser
+    GET     /taskList5                                      controllers.TaskList5.taskList
+    POST    /addTask5                                       controllers.TaskList5.addTask
+    POST    /deleteTask5                                    controllers.TaskList5.deleteTask
+    GET     /logout5                                        controllers.TaskList5.logout
+
+#scalikeJDBC
+GET     /getNameById/:id                                controllers.TaskList5.getNameById(id: Int)
+GET     /getNameList                                    controllers.TaskList5.getNameList
+GET     /getNameListByForeach                           controllers.TaskList5.getNameListByForeach
+GET     /getEmail                                       controllers.TaskList5.getEmailOfFirstEmployee
+POST    /updateName/:id/:newName                        controllers.TaskList5.updateNameById(id: Int, newName: String)
+POST    /deleteUser/:id                                 controllers.TaskList5.deleteById(id: Int)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)

@@ -20,9 +20,10 @@ libraryDependencies ++= Seq(
 
   "org.scalikejdbc" %% "scalikejdbc" % "3.5.0",
   "org.scalikejdbc" %% "scalikejdbc-config" % "3.5.0",
-  "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.5.1",
-  "org.scalikejdbc" %% "scalikejdbc-test" % "3.5.0" % "test"
+  "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.8.0-scalikejdbc-3.5",
+  "org.scalikejdbc" %% "scalikejdbc-test" % "3.5.0" % "test",
 )
+libraryDependencies += evolutions
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "play-framework-starter.controllers._"

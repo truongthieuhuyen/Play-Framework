@@ -9,7 +9,7 @@ import slick.jdbc.MySQLProfile.api._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 
 import scala.concurrent._
-
+import scalikejdbc._
 
 @Singleton
 class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, cc: ControllerComponents)(implicit ec: ExecutionContext)
@@ -98,5 +98,6 @@ class TaskList5 @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     // need to change the route
     Ok(Json.toJson(true)).withSession(request.session - "username")
   }
+
 
 }

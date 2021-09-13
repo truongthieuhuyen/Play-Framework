@@ -5,6 +5,7 @@ import models.Tables._
 import scala.concurrent._
 import slick.jdbc.MySQLProfile.api._
 import org.mindrot.jbcrypt.BCrypt
+import scalikejdbc._
 
 class TaskDatabaseModel (db: Database)(implicit ec: ExecutionContext){
   def validateUser(username: String, password: String): Future[Option[Int]] = {
@@ -43,5 +44,37 @@ class TaskDatabaseModel (db: Database)(implicit ec: ExecutionContext){
   def removeTask(itemId: Int): Future[Boolean] = {
     db.run(Items.filter(_.itemId === itemId).delete).map(count => count > 0)
   }
+
+  /** scalike JDBC*/
+  def getNameById(id: Int)(implicit session: DBSession = AutoSession): Option[String] = SQL("select * from users where id = {id}")
+    .bindByName(Symbol("id") -> id)
+    .map { rs => rs.string("name") }
+    .single().apply()
+
+  def getEmailOfFirstEmployee()(implicit session: DBSession = AutoSession): Option[String] =
+    SQL("select * from users")
+      .map { rs => rs.string("email") }
+      .first().apply()
+
+  def getNameList()(implicit session: DBSession = AutoSession): List[String] =
+    SQL("select * from users")
+      .map { rs => rs.string("name") }
+      .list().apply()
+
+  def getNameListByForeach()(implicit session: DBSession = AutoSession): Unit =
+    SQL("select * from users")
+      .foreach(rs => print(rs.string("name")))
+
+  def updateNameById(id: Int, newName: String)(implicit session: DBSession = AutoSession): Int =
+    SQL("update users set name = {name} where id = {id}")
+      .bindByName(Symbol("id") -> id, Symbol("name") -> newName)
+      .update().apply()
+
+  def deleteById(id: Int)(implicit session: DBSession = AutoSession): Boolean =
+    SQL("delete from users where id = {id}")
+      .bindByName(Symbol("id") -> id)
+      .execute().apply()
+
+
 }
 

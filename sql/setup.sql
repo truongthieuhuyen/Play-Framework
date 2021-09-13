@@ -1,1 +1,1 @@
-CREATE DATABASE task_list WITH OWNER=root;
+--CREATE DATABASE task_list WITH OWNER=root;
