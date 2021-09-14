@@ -5,6 +5,7 @@
 
 # An example controller showing a sample home page
 GET     /                                                  controllers.HomeController.index()
+GET     /api                                                controllers.Application.api
 #Routes for v1
 GET     /person                                            controllers.HomeController.person(prodType, prodNum: Int)
 GET     /perosn/:prodType/:prodNum                         controllers.HomeController.person(prodType, prodNum: Int)
@@ -57,13 +58,13 @@ GET     /logout3                                        controllers.TaskList3.lo
 
 ##scalikeJDBC
 #User
-GET     /user/getById/:id                                    controllers.UserController.getById(id: Int)
+GET     /user/getById/                                       controllers.UserController.getById
 GET     /user/getNameList                                    controllers.UserController.getAllUser
 #GET     /user/getNameListByForeach                           controllers.UserController.getNameListByForeach
 #GET     /user/getEmail                                       controllers.UserController.getEmailOfFirstEmployee
 POST    /user/create                                         controllers.UserController.createUser
-POST    /user/update/:id/:newName                            controllers.UserController.updateAccount(id: Int, newName: String)
-POST    /user/delete/:id                                     controllers.UserController.deleteUser(id: Int)
+POST    /user/update                                         controllers.UserController.updateAccount
+POST    /user/delete                                         controllers.UserController.deleteUser
 
 #Item
 GET     /item/getItem                                        controllers.ItemController.getItem

@@ -28,14 +28,14 @@ class TaskList3 @Inject()( cc: ControllerComponents) extends AbstractController(
   }
 
   def withSessionUsername(function: String => Result)(implicit request: Request[AnyContent]) = {
-    request.session.get("username").map(function).getOrElse(Ok(Json.toJson(Seq.empty[String])))
+    request.session.get("name").map(function).getOrElse(Ok(Json.toJson(Seq.empty[String])))
   }
 
   def validateUser = Action { implicit request =>
     withJsonBody[UserData] { ud =>
-      if (UserTaskInMemory.validateUser(ud.username, ud.password)) {
+      if (UserTaskInMemory.validateUser(ud.name, ud.password)) {
         Ok(Json.toJson(true))
-          .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
+          .withSession("name" -> ud.name, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
       } else {
         Ok(Json.toJson(false))
       }
@@ -44,9 +44,9 @@ class TaskList3 @Inject()( cc: ControllerComponents) extends AbstractController(
 
   def createUser = Action { implicit request =>
     withJsonBody[UserData] { ud =>
-      if (UserTaskInMemory.createUser(ud.username, ud.password)) {
+      if (UserTaskInMemory.createUser(ud.name, ud.password)) {
         Ok(Json.toJson(true))
-          .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
+          .withSession("name" -> ud.name, "csrfToken" -> play.filters.csrf.CSRF.getToken.map(_.value).getOrElse(""))
       } else {
         Ok(Json.toJson(false))
       }
@@ -54,30 +54,30 @@ class TaskList3 @Inject()( cc: ControllerComponents) extends AbstractController(
   }
 
   def taskList = Action { implicit request =>
-    withSessionUsername { username =>
-      Ok(Json.toJson(UserTaskInMemory.getTasks(username)))
+    withSessionUsername { name =>
+      Ok(Json.toJson(UserTaskInMemory.getTasks(name)))
     }
   }
 
   def addTask = Action{ implicit request =>
-    withSessionUsername(username =>
+    withSessionUsername(name =>
       withJsonBody[String] { task =>
-        UserTaskInMemory.addTask(username,task);
+        UserTaskInMemory.addTask(name,task);
         Ok(Json.toJson(true))
       }
     )
   }
 
   def deleteTask = Action{implicit request =>
-    withSessionUsername(username =>
+    withSessionUsername(name =>
       withJsonBody[Int] { index =>
-        UserTaskInMemory.removeTask(username,index)
+        UserTaskInMemory.removeTask(name,index)
         Ok(Json.toJson(true))
       }
     )
   }
 
   def logout = Action {implicit request =>
-    Ok(Json.toJson(true)).withSession(request.session - "username")
+    Ok(Json.toJson(true)).withSession(request.session - "name")
   }
 }
