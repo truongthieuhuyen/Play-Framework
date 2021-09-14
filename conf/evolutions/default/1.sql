@@ -1,7 +1,7 @@
 # --- !Ups
 
 CREATE TABLE user (
-  id int(20) NOT NULL AUTO_INCREMENT,
+  user_id int(12) NOT NULL AUTO_INCREMENT,
   email varchar(255) NOT NULL,
   password varchar(255) NOT NULL,
   name varchar(255) NOT NULL,

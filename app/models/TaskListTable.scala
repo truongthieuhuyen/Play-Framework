@@ -2,7 +2,7 @@ package models
 
 import scalikejdbc._
 
-case class Item(id: Int,itemName: String, userId: Int, isValid: Boolean)
+case class Item(itemId: Int,itemName: String, userId: Int, isValid: Boolean)
 object TaskListTable extends SQLSyntaxSupport[Item]{
   override val tableName = "item"
 

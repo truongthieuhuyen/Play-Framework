@@ -2,15 +2,17 @@ package models
 
 import scalikejdbc._
 
-case class User(id: Long, name: String, email: String)
+case class User(userId: Int,email: String, password: String, name: String, isAdmin: Boolean)
 object UsersTable extends SQLSyntaxSupport[User]{
    override val tableName = "user"
 
   def apply(e: ResultName[User])(rs: WrappedResultSet): User =
     new User(
       rs.int("id"),
+      rs.string("email"),
+      rs.string("password"),
       rs.string("name"),
-      rs.string("email")
+      rs.boolean("isAdmin")
     )
 
   val u = UsersTable.syntax("u")
