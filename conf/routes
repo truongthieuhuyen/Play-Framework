@@ -55,13 +55,22 @@ GET     /logout3                                        controllers.TaskList3.lo
 #POST    /deleteTask5                                    controllers.TaskList5.deleteTask
 #GET     /logout5                                        controllers.TaskList5.logout
 
-#scalikeJDBC
-#GET     /getNameById/:id                                controllers.TaskList5.getNameById(id: Int)
-#GET     /getNameList                                    controllers.TaskList5.getNameList
-#GET     /getNameListByForeach                           controllers.TaskList5.getNameListByForeach
-#GET     /getEmail                                       controllers.TaskList5.getEmailOfFirstEmployee
-#POST    /updateName/:id/:newName                        controllers.TaskList5.updateNameById(id: Int, newName: String)
-#POST    /deleteUser/:id                                 controllers.TaskList5.deleteById(id: Int)
+##scalikeJDBC
+#User
+GET     /user/getById/:id                                    controllers.UserController.getById(id: Int)
+GET     /user/getNameList                                    controllers.UserController.getAllUser
+#GET     /user/getNameListByForeach                           controllers.UserController.getNameListByForeach
+#GET     /user/getEmail                                       controllers.UserController.getEmailOfFirstEmployee
+POST    /user/create                                         controllers.UserController.createUser
+POST    /user/update/:id/:newName                            controllers.UserController.updateAccount(id: Int, newName: String)
+POST    /user/delete/:id                                     controllers.UserController.deleteUser(id: Int)
+
+#Item
+GET     /item/getItem                                        controllers.ItemController.getItem
+GET     /item/getAllItem                                     controllers.ItemController.getAllItem
+POST    /item/addItem                                        controllers.ItemController.addNewItem
+POST    /item/editItem                                       controllers.ItemController.editItem
+POST    /item/removeItem                                     controllers.ItemController.removeItem
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
