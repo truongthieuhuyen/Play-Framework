@@ -12,23 +12,23 @@ object User extends SQLSyntaxSupport[User] {
   override val tableName = "user"
   override val columns = Seq("user_id", "email", "password", "name", "is_admin")
 
-  def apply(e: ResultName[User])(rs: WrappedResultSet): User =
+  def apply(ut: ResultName[User])(rs: WrappedResultSet): User =
     new User(
-      rs.int("userId"),
-      rs.string("email"),
-      rs.string("password"),
-      rs.string("name"),
-      rs.boolean("isAdmin")
+      userId = rs.get(ut.userId),
+      email = rs.get(ut.email),
+      password = rs.get(ut.password),
+      name = rs.get(ut.name),
+      isAdmin = rs.get(ut.isAdmin)
     )
 
   val ut = User.syntax("ut")
 
-  def getById(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
-    /** val idClause = sqls"where id = ${id}" */
-    sql"select * from ${User.as(ut)} where user_id = ${userId}"
-      .map(rs => User(ut.resultName)(rs))
-      .single().apply()
-  }
+//  def getById(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
+//    /** val idClause = sqls"where id = ${id}" */
+//    sql"select * from ${User.as(ut)} where user_id = ${userId}"
+//      .map(rs => User(ut.resultName)(rs))
+//      .single().apply()
+//  }
 
   def find(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
     withSQL {
