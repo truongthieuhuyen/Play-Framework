@@ -58,13 +58,13 @@ GET     /logout3                                        controllers.TaskList3.lo
 
 ##scalikeJDBC
 #User
-GET     /user/getById/:userId                                controllers.UserController.getById(userId: Int)
+GET     /user/getUser/:userId                                controllers.UserController.getById(userId: Int)
 GET     /user/getNameList                                    controllers.UserController.getAllUser
 #GET     /user/getNameListByForeach                           controllers.UserController.getNameListByForeach
 #GET     /user/getEmail                                       controllers.UserController.getEmailOfFirstEmployee
-POST    /user/create                                         controllers.UserController.createUser(email, password, name)
-PUT     /user/update                                         controllers.UserController.updateAccount
-DELETE  /user/delete                                         controllers.UserController.deleteUser
+POST    /user/create                                         controllers.UserController.createUser
+PUT     /user/update/:userId                                 controllers.UserController.accountSetting(userId: Int)
+DELETE  /user/delete/:userId                                 controllers.UserController.deleteUser(userId: Int)
 
 #Item
 GET     /item/getItem                                        controllers.ItemController.getItem
