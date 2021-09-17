@@ -1,20 +1,20 @@
 package controllers
 
-import org.scalatestplus.play._
 import models._
+import org.scalatestplus.play._
 
 class UserTaskInMemorySpec extends PlaySpec {
   "UserTaskInMemory" must {
     "do valid login for default" in (
-      UserTaskInMemory.validateUser("mrkable", "pass") mustBe (true)
+      UserTaskInMemory.validateUser("admin", "password") mustBe (true)
       )
 
     "reject login with wrong username" in (
-      UserTaskInMemory.validateUser("mrk", "pass") mustBe (false)
+      UserTaskInMemory.validateUser("admin123", "password") mustBe (false)
       )
 
     "reject login with wrong password" in (
-      UserTaskInMemory.validateUser("mrkable", "pect") mustBe (false)
+      UserTaskInMemory.validateUser("admin", "pect") mustBe (false)
       )
 
     "reject login with empty username & password" in (
@@ -22,7 +22,7 @@ class UserTaskInMemorySpec extends PlaySpec {
       )
 
     "get correct default tasks" in (
-      UserTaskInMemory.getTasks("mrkable") mustBe (List("receive", "unbox", "shot"))
+      UserTaskInMemory.getTasks("admin") mustBe (List("receive", "unbox", "shot","push"))
       )
 
     "create new user with no task" in {
@@ -31,12 +31,12 @@ class UserTaskInMemorySpec extends PlaySpec {
     }
 
     "create new user with username has existed" in(
-      UserTaskInMemory.createUser("mrkable","new1") mustBe(false)
+      UserTaskInMemory.createUser("admin","new1") mustBe(false)
     )
 
     "add new task for default user " in {
-      UserTaskInMemory.addTask("mrkable", "take new task")
-      UserTaskInMemory.getTasks("mrkable") must contain("take new task")
+      UserTaskInMemory.addTask("admin", "take new task")
+      UserTaskInMemory.getTasks("admin") must contain("take new task")
     }
 
     "add new task for a new user" in{
@@ -45,8 +45,8 @@ class UserTaskInMemorySpec extends PlaySpec {
     }
 
     "remove task from default user" in{
-      UserTaskInMemory.removeTask("mrkable",UserTaskInMemory.getTasks("mrkable").indexOf("shot"))
-      UserTaskInMemory.getTasks("mrkable") must not contain("shot")
+      UserTaskInMemory.removeTask("admin",UserTaskInMemory.getTasks("admin").indexOf("shot"))
+      UserTaskInMemory.getTasks("admin") must not contain("shot")
     }
   }
 }

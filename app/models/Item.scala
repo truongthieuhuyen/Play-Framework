@@ -2,6 +2,7 @@ package models
 
 import scalikejdbc._
 
+/** Mapping */
 case class Item(itemId: Int,itemName: String, userId: Int, isValid: Boolean)
 object Item extends SQLSyntaxSupport[Item]{
   override val tableName = "item"

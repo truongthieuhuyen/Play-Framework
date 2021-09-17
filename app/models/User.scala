@@ -2,15 +2,20 @@ package models
 
 import scalikejdbc._
 
+/** Pair to database */
 case class User(userId: Int, email: String, password: String, name: String, isAdmin: Boolean) {
-//  def save()(implicit session: DBSession = User.autoSession): Unit
+//  def save()(implicit session: DBSession = User.autoSession): User
 
 //  def destroy()(implicit session: DBSession = User.autoSession): Unit
 }
 
+/** Mapping */
 object User extends SQLSyntaxSupport[User] {
   override val tableName = "user"
   override val columns = Seq("user_id", "email", "password", "name", "is_admin")
+
+  def apply(ut: SyntaxProvider[User])(rs: WrappedResultSet): User =
+    apply(ut.resultName)(rs)
 
   def apply(ut: ResultName[User])(rs: WrappedResultSet): User =
     new User(
@@ -22,6 +27,18 @@ object User extends SQLSyntaxSupport[User] {
     )
 
   val ut = User.syntax("ut")
+//  val mda = MessageDigest.getInstance("SHA-512")
+//  val cookieHeader = "X-Auth-Token"
+
+//  private def createCookie(user: User): Cookie = {
+//    val randomPart = UUID.randomUUID().toString.toUpperCase
+//    val userPart = user.userId.toString.toUpperCase
+//    val key = s"$randomPart|$userPart"
+//    val token = Base64.encodeBase64String(mda.digest(key.getBytes))
+//    val duration = Duration.create(10, TimeUnit.HOURS)
+//    cacheApi.set(token, user, duration)
+//    Cookie(cookieHeader, token, maxAge = Some(duration.toSeconds.toInt))
+//  }
 
 //  def getById(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
 //    /** val idClause = sqls"where id = ${id}" */
@@ -39,7 +56,10 @@ object User extends SQLSyntaxSupport[User] {
   }
 
   def findAll()(implicit session: DBSession = AutoSession): List[User] = {
-    withSQL(select.from(User as ut)).map(User(ut.resultName)).list().apply()
+    withSQL(
+      select.from(User as ut))
+      .map(User(ut.resultName))
+      .list().apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = AutoSession): List[User] = {
@@ -51,7 +71,7 @@ object User extends SQLSyntaxSupport[User] {
   def create(email: String, password: String, name: String, isAdmin: Boolean)
             (implicit session: DBSession = AutoSession): User = {
     val generatedKey = withSQL {
-      insertInto(User).columns(
+      insert.into(User).columns(
         column.email,
         column.password,
         column.name,

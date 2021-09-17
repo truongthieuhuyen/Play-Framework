@@ -10,7 +10,7 @@ class Application @Inject()(val controllerComponents: ControllerComponents) exte
     val json = Json.obj(
       "version" -> "0.1",
       "links" -> Seq(
-        Json.obj("rel" -> "user","href" -> routes.UserController.getAllUser.absoluteURL())
+        Json.obj("rel" -> "users","href" -> routes.UserController.getAllUser.absoluteURL())
       )
     )
     Ok(json)

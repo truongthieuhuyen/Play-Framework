@@ -1,10 +1,9 @@
 package models
 
-import akka.http.scaladsl.model.DateTime
 import play.api.libs.json._
 
 
-case class UserData(email: String, password: String, name: String, isAdmin: Boolean) {
+case class UserData(userId: Int,email: String, password: String, name: String, isAdmin: Boolean) {
   def create: User = User.create(email, password, name, isAdmin)
 
   def update(userId: Int): User = User(userId, email, password, name, isAdmin)
@@ -22,5 +21,5 @@ object UserData {
   implicit val userDataReads = Json.reads[UserData]
   implicit val userDataWrites = Json.writes[UserData]
 
-  def fromUser(ut: User): UserData = UserData(ut.email,ut.password,ut.name,ut.isAdmin)
+  def fromUser(ut: User): UserData = UserData(ut.userId,ut.email,ut.password,ut.name,ut.isAdmin)
 }

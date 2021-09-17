@@ -74,7 +74,6 @@ class UserController @Inject()(val controllerComponents: ControllerComponents) e
         Ok(Json.obj("ok" -> "deleted"))
       case None => NotFound(Json.obj("error" -> "Not found!"))
     }
-
   }
 
 

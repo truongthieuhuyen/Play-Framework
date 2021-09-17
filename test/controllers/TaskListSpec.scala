@@ -12,9 +12,9 @@ class TaskListSpec extends PlaySpec with GuiceOneServerPerSuite with OneBrowserP
       find(cssSelector("h2")).foreach(e => e.text mustBe ("Login"))
 
       click on "username-login"
-      textField(id("username-login")).value = "mrkable"
+      textField(id("username-login")).value = "admin"
       click on "password-login"
-      pwdField(id("password-login")).value = "pass"
+      pwdField(id("password-login")).value = "password"
       submit()
       eventually {
         println("In eventually")
@@ -22,7 +22,7 @@ class TaskListSpec extends PlaySpec with GuiceOneServerPerSuite with OneBrowserP
         pageTitle mustBe("Task List")
         find(cssSelector("h1")).isEmpty mustBe(false)
         find(cssSelector("h1")).foreach(e => e.text mustBe "Task")
-        findAll(cssSelector("li")).toList.map(_.text) mustBe(List("receive", "unbox", "shot"))
+        findAll(cssSelector("li")).toList.map(_.text) mustBe(List("receive", "unbox", "shot","push"))
       }
     }
   }
