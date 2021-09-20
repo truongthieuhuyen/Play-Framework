@@ -63,6 +63,7 @@ GET     /user/getNameList                                    controllers.UserCon
 #GET     /user/getNameListByForeach                           controllers.UserController.getNameListByForeach
 #GET     /user/getEmail                                       controllers.UserController.getEmailOfFirstEmployee
 POST    /user/create                                         controllers.UserController.createUser
+POST    /user/addNew                                        controllers.UserController.addNewUser
 PUT     /user/update/:userId                                 controllers.UserController.accountSetting(userId: Int)
 DELETE  /user/delete/:userId                                 controllers.UserController.deleteUser(userId: Int)
 
