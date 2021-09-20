@@ -6,7 +6,8 @@ import play.api.libs.json._
 case class UserData(userId: Int,email: String, password: String, name: String, isAdmin: Boolean) {
   def create: User = User.create(email, password, name, isAdmin)
 
-  def update(userId: Int): User = User(userId, email, password, name, isAdmin)
+  def update: Int => User = userId => User(userId, email, password, name, isAdmin).save()
+
 }
 
 object UserData {

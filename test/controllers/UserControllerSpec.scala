@@ -12,9 +12,8 @@ class UserControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
       val controllers = new UserController(stubControllerComponents())
       val request = controllers.createUser.apply(FakeRequest(POST,"/"))
 
-      status(request) mustBe OK
-
-//      contentType(request) mustBe Some("text/html")
+//      status(request) mustBe OK
+      contentType(request) mustBe Some("application/json")
 //      contentAsString(request) must include ("Welcome to Play")
     }
   }

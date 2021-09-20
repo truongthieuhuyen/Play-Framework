@@ -1,12 +1,13 @@
 package models
 
+import play.api.libs.json.Json
 import scalikejdbc._
 
 /** Pair to database */
 case class User(userId: Int, email: String, password: String, name: String, isAdmin: Boolean) {
-//  def save()(implicit session: DBSession = User.autoSession): User
+  def save()(implicit session: DBSession = User.autoSession): User = User.save(this)(session)
 
-//  def destroy()(implicit session: DBSession = User.autoSession): Unit
+  def destroy()(implicit session: DBSession = User.autoSession): Unit = User.destroy(this)(session)
 }
 
 /** Mapping */
@@ -27,6 +28,10 @@ object User extends SQLSyntaxSupport[User] {
     )
 
   val ut = User.syntax("ut")
+  implicit val newTodoListJson = Json.format[User]
+
+
+
 //  val mda = MessageDigest.getInstance("SHA-512")
 //  val cookieHeader = "X-Auth-Token"
 
@@ -40,12 +45,12 @@ object User extends SQLSyntaxSupport[User] {
 //    Cookie(cookieHeader, token, maxAge = Some(duration.toSeconds.toInt))
 //  }
 
-//  def getById(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
-//    /** val idClause = sqls"where id = ${id}" */
-//    sql"select * from ${User.as(ut)} where user_id = ${userId}"
-//      .map(rs => User(ut.resultName)(rs))
-//      .single().apply()
-//  }
+  def getById(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
+    /** val idClause = sqls"where id = ${id}" */
+    sql"select * from ${User.as(ut)} where user_id = ${userId}"
+      .map(rs => User(ut.resultName)(rs))
+      .single().apply()
+  }
 
   def find(userId: Int)(implicit session: DBSession = AutoSession): Option[User] = {
     withSQL {
@@ -70,19 +75,29 @@ object User extends SQLSyntaxSupport[User] {
 
   def create(email: String, password: String, name: String, isAdmin: Boolean)
             (implicit session: DBSession = AutoSession): User = {
+//    val generatedKey = withSQL {
+//      insert.into(User).columns(
+//        column.email,
+//        column.password,
+//        column.name,
+//        column.isAdmin
+//      ).values(
+//        email,
+//        password,
+//        name,
+//        isAdmin
+//      )
+//    }.updateAndReturnGeneratedKey().apply()
+
     val generatedKey = withSQL {
-      insert.into(User).columns(
-        column.email,
-        column.password,
-        column.name,
-        column.isAdmin
-      ).values(
-        email,
-        password,
-        name,
-        isAdmin
+      insert.into(User).namedValues(
+        column.email -> "alicer@gmail.com",
+        column.password -> "12345678",
+        column.name -> "Alice",
+        column.isAdmin -> false
       )
     }.updateAndReturnGeneratedKey().apply()
+
     User(
       userId = generatedKey.toInt,
       email = email,

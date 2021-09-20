@@ -4,21 +4,13 @@ import javax.inject._
 import models._
 import play.api.libs.json._
 import play.api.mvc._
+import utils.JsonUtils
 
 import scala.collection.mutable
 
 
-class UserController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
-  private val users = mutable.Map[String, String]("admin" -> "password")
-
-//  def withJsonBody[A](function: A => Result)(implicit request: Request[AnyContent], reads: Reads[A]) = {
-//    request.body.asJson.map(body =>
-//      Json.fromJson[A](body) match {
-//        case JsSuccess(a, path) => function(a)
-//        case e@JsError(_) => Redirect(routes.TaskList3.load)
-//      }
-//    ).getOrElse(Redirect(routes.TaskList3.load))
-//  }
+class UserController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with JsonUtils {
+  private val userList = new mutable.ListBuffer[User]()
 
   /** Status OK */
   def getAllUser = Action { implicit request =>
@@ -41,10 +33,10 @@ class UserController @Inject()(val controllerComponents: ControllerComponents) e
     }
   }
 
-  /** Status 400 BAD REQUEST */
+  /** Status 415 UNSUPPORTED MEDIA TYPE */
   def createUser = Action(parse.json) { implicit request =>
     request.body.validate[UserData].fold(
-      error => BadRequest(Json.obj("error" -> "Json was not correct")),
+      error => UnsupportedMediaType(Json.obj("error" -> "Json was not correct")),
       userData => {
         val user = userData.create
         Created.withHeaders(LOCATION -> routes.UserController.getById(user.userId).absoluteURL())
@@ -52,21 +44,39 @@ class UserController @Inject()(val controllerComponents: ControllerComponents) e
     )
   }
 
-  /** Status  */
+  def addNewUser = Action { implicit request =>
+    val content = request.body
+    val jsonObject = content.asJson
+    val listUser: Option[User] =
+      jsonObject.flatMap(
+        Json.fromJson[User](_).asOpt
+      )
+
+    listUser match {
+      case Some(newUser) =>
+        val nextId = userList.map(_.userId).max + 1
+        val toBeAdded = userList(nextId)
+        userList += toBeAdded
+        Created(Json.toJson(toBeAdded))
+      case None =>
+        BadRequest
+    }
+  }
+
+  /** Status */
   def accountSetting(userId: Int) = Action(parse.json) { implicit request =>
     request.body.validate[UserData].fold(
-      error => BadRequest(Json.obj("error" -> "Json was not correct")),
+      error => UnsupportedMediaType(Json.obj("error" -> "Json was not correct")),
       userData => {
         User.find(userId) match {
           case Some(ut) => userData.update(ut.userId); NoContent
-
           case None => NotFound(Json.obj("error" -> "Not found!"))
         }
       }
     )
   }
 
-/** Status OK */
+  /** Status OK */
   def deleteUser(userId: Int) = Action { implicit request =>
     User.find(userId) match {
       case Some(ut) =>
